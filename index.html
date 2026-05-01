@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WooFood — Recettes riches en protéines</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Recettes simples et riches en protéines qui m'ont aidé à transformer mon physique.">
+</head>
+<body>
+  <header class="nav" id="top">
+    <div class="nav-inner container">
+      <div class="brand">
+        <a href="#home" class="logo">WooFood</a>
+      </div>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home">Accueil</a>
+        <a href="#recipes">Recettes</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="nav-search">
+          <input id="navSearch" type="search" placeholder="Rechercher des recettes..." aria-label="Rechercher des recettes">
+        </div>
+        <button id="hamburger" class="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero container">
+      <div class="hero-inner">
+        <h1 class="hero-title">WooFood</h1>
+        <p class="hero-sub">Nourris ton corps. Transforme ta vie.</p>
+        <p class="hero-blurb">Recettes simples et riches en protéines qui m'ont aidé à transformer mon physique.</p>
+        <a class="cta" href="#recipes">Voir les recettes</a>
+      </div>
+    </section>
+
+    <section id="story" class="story container">
+      <h2>Ma transformation</h2>
+      <p class="story-text">Je suis passé de <span class="highlight weight">96kg</span> à <span class="highlight weight success">72kg</span> en seulement quelques mois. Pendant cette période, j'ai créé des repas simples et riches en protéines pour rester constant et vraiment apprécier ce que je mangeais.</p>
+      <p class="story-text">Au fil du temps, de plus en plus de personnes m'ont demandé mes recettes. <strong class="accent">J'ai donc décidé de tout regrouper au même endroit.</strong></p>
+      <p class="story-text">Ce site n'est pas une quête de perfection. Il s'agit de <strong class="accent">régularité, simplicité et résultats</strong>.</p>
+      <p class="story-text"><strong>Important :</strong> Ce site est basé sur mon expérience personnelle. Ce sont des recettes peu caloriques et protéinées qui ont fonctionné pour moi, associées à <span class="highlight">10h de sport par semaine</span> : un mélange de sports de combat divers et de musculation. Ces résultats sont la combinaison de l'alimentation ET de l'entraînement régulier.</p>
+    </section>
+
+    <section id="recipes" class="recipes container">
+      <div class="recipes-header">
+        <h2>Recettes</h2>
+        <div class="recipes-controls">
+          <div class="filters" role="tablist" aria-label="Catégories de recettes">
+            <button class="filter active" data-filter="tous">Tous</button>
+            <button class="filter" data-filter="dejeuner">Déjeuner</button>
+            <button class="filter" data-filter="midi">Midi</button>
+            <button class="filter" data-filter="soir">Soir</button>
+            <button class="filter" data-filter="smoothie">Smoothie</button>
+            <button class="filter" data-filter="encas">En-cas</button>
+            <button class="filter" data-filter="preentrainement">Pré-entraînement</button>
+          </div>
+
+          <div class="range-filters" aria-label="Filtrer par calories et protéines">
+            <div class="range-group">
+              <label for="caloriesMin">Calories</label>
+              <div class="range-inputs">
+                <input id="caloriesMin" type="number" min="0" step="1" placeholder="Min">
+                <span>à</span>
+                <input id="caloriesMax" type="number" min="0" step="1" placeholder="Max">
+              </div>
+            </div>
+
+            <div class="range-group">
+              <label for="proteinMin">Protéines</label>
+              <div class="range-inputs">
+                <input id="proteinMin" type="number" min="0" step="1" placeholder="Min">
+                <span>à</span>
+                <input id="proteinMax" type="number" min="0" step="1" placeholder="Max">
+              </div>
+            </div>
+
+            <button id="resetRangeFilters" class="range-reset" type="button">Réinitialiser</button>
+          </div>
+
+          <div class="recipes-search">
+            <input id="recipesSearch" type="search" placeholder="Rechercher par titre..." aria-label="Rechercher des recettes par titre">
+          </div>
+
+          <div class="sort-controls">
+            <label for="sortSelect" class="sr-only">Trier les recettes</label>
+            <select id="sortSelect" aria-label="Trier les recettes">
+              <option value="none">Trier</option>
+              <option value="cal-asc">Calories ↑</option>
+              <option value="cal-desc">Calories ↓</option>
+              <option value="prot-asc">Protéines ↑</option>
+              <option value="prot-desc">Protéines ↓</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="grid" class="grid">
+        <!-- Recettes chargées dynamiquement par script.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer container">
+    <p>© WooFood — Construit avec de la sueur et des repas simples.</p>
+  </footer>
+
+  <button id="scrollToTop" aria-label="Remonter au sommet">↑</button>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
