@@ -34,6 +34,7 @@
   <main>
     <section id="home" class="hero container">
       <div class="hero-inner">
+        <img src="images/doberman.png" alt="Doberman mascotte" class="hero-mascot" id="heroMascot">
         <h1 class="hero-title">WooFood</h1>
         <p class="hero-sub">Nourris ton corps. Transforme ta vie.</p>
         <p class="hero-blurb">Recettes simples et riches en protéines qui m'ont aidé à transformer mon physique.</p>
@@ -42,11 +43,16 @@
     </section>
 
     <section id="story" class="story container">
-      <h2>Ma transformation</h2>
-      <p class="story-text">Je suis passé de <span class="highlight weight">96kg</span> à <span class="highlight weight success">72kg</span> en seulement quelques mois. Pendant cette période, j'ai créé des repas simples et riches en protéines pour rester constant et vraiment apprécier ce que je mangeais.</p>
-      <p class="story-text">Au fil du temps, de plus en plus de personnes m'ont demandé mes recettes. <strong class="accent">J'ai donc décidé de tout regrouper au même endroit.</strong></p>
-      <p class="story-text">Ce site n'est pas une quête de perfection. Il s'agit de <strong class="accent">régularité, simplicité et résultats</strong>.</p>
-      <p class="story-text"><strong>Important :</strong> Ce site est basé sur mon expérience personnelle. Ce sont des recettes peu caloriques et protéinées qui ont fonctionné pour moi, associées à <span class="highlight">10h de sport par semaine</span> : un mélange de sports de combat divers et de musculation. Ces résultats sont la combinaison de l'alimentation ET de l'entraînement régulier.</p>
+      <div class="story-wrapper">
+        <div class="story-content">
+          <h2>Ma transformation</h2>
+          <p class="story-text">Je suis passé de <span class="highlight weight">96kg</span> à <span class="highlight weight success">72kg</span> en seulement quelques mois. Pendant cette période, j'ai créé des repas simples et riches en protéines pour rester constant et vraiment apprécier ce que je mangeais.</p>
+          <p class="story-text">Au fil du temps, de plus en plus de personnes m'ont demandé mes recettes. <strong class="accent">J'ai donc décidé de tout regrouper au même endroit.</strong></p>
+          <p class="story-text">Ce site n'est pas une quête de perfection. Il s'agit de <strong class="accent">régularité, simplicité et résultats</strong>.</p>
+          <p class="story-text"><strong>Important :</strong> Ce site est basé sur mon expérience personnelle. Ce sont des recettes peu caloriques et protéinées qui ont fonctionné pour moi, associées à <span class="highlight">10h de sport par semaine</span> : un mélange de sports de combat divers et de musculation. Ces résultats sont la combinaison de l'alimentation ET de l'entraînement régulier.</p>
+        </div>
+        <img src="images/doberman.png" alt="Doberman mascotte" class="story-mascot">
+      </div>
     </section>
 
     <section id="recipes" class="recipes container">
@@ -114,6 +120,21 @@
   </footer>
 
   <button id="scrollToTop" aria-label="Remonter au sommet">↑</button>
+
+  <div id="masterModal" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Fermer">&times;</button>
+      <img src="images/doberman.png" alt="Doberman mascotte" class="modal-image">
+      <div class="modal-text">
+        <p class="modal-quote">Jeune disciple, observe le chien.</p>
+        <p class="modal-body">Vois comment il vit avec discipline. Chaque jour, il mange la même nourriture, sans complaisance, sans distraction. Son corps s'en trouve fort et vigoureux.</p>
+        <p class="modal-body">Regarde comme il se dépense sans relâche. Il court, il joue, il entraîne son corps avec constance. C'est dans ce dépense que réside la vraie force.</p>
+        <p class="modal-body">Et pourtant, de temps en temps, il reçoit une friandise. Il l'apprécie, la savoure, puis revient à sa discipline. Car la perfection n'existe pas. Ce qui existe, c'est la <strong>régularité</strong>, la <strong>simplicité</strong>, et les <strong>résultats</strong> qu'elles apportent.</p>
+        <p class="modal-wisdom">Sois comme le chien. Transforme ta vie.</p>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js" defer></script>
 </body>

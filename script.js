@@ -2,7 +2,7 @@
 
 // Variables globales
 let recipes = [];
-const GLOBAL_RECIPE_IMAGE = 'images/ChatGPT Image 30 avr. 2026, 21_13_10.png';
+const GLOBAL_RECIPE_IMAGE = 'images/photoavenir.png';
 
 const CATEGORY_LABELS = {
   dejeuner: 'Déjeuner',
@@ -361,6 +361,41 @@ if(scrollToTopBtn){
 
   scrollToTopBtn.addEventListener('click', () => {
     window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+}
+
+// MODAL - Maître Kung Fu
+const heroMascot = document.getElementById('heroMascot');
+const masterModal = document.getElementById('masterModal');
+const modalClose = document.querySelector('.modal-close');
+const modalOverlay = document.querySelector('.modal-overlay');
+
+if(heroMascot && masterModal) {
+  heroMascot.style.cursor = 'pointer';
+  heroMascot.addEventListener('click', () => {
+    masterModal.classList.add('active');
+    masterModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  });
+
+  modalClose.addEventListener('click', () => {
+    masterModal.classList.remove('active');
+    masterModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  });
+
+  modalOverlay.addEventListener('click', () => {
+    masterModal.classList.remove('active');
+    masterModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && masterModal.classList.contains('active')) {
+      masterModal.classList.remove('active');
+      masterModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
   });
 }
 
