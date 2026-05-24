@@ -202,8 +202,51 @@ article.recipe a:focus{outline:2px solid rgba(255,122,24,0.3);outline-offset:2px
   .story-mascot{height:300px;flex-shrink:0}
 }
 
+/* Bouton Voir plus */
+.load-more-btn{
+  display:block;
+  margin:40px auto 0;
+  padding:12px 32px;
+  background:var(--accent);
+  color:var(--bg);
+  border:none;
+  border-radius:var(--radius);
+  font-weight:600;
+  font-size:1rem;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  box-shadow:0 0 16px rgba(57,255,20,0.2);
+}
+.load-more-btn:hover{
+  background:var(--accent-2);
+  box-shadow:0 0 24px rgba(255,122,24,0.3);
+  transform:scale(1.05);
+}
+.load-more-btn:active{
+  transform:scale(0.98);
+}
+
+/* Message de fin */
+.end-message{
+  text-align:center;
+  margin:40px auto 0;
+  padding:24px;
+  background:linear-gradient(135deg, rgba(57,255,20,0.1), rgba(255,122,24,0.1));
+  border:1px solid rgba(57,255,20,0.2);
+  border-radius:var(--radius);
+  backdrop-filter:blur(8px);
+}
+.end-message p{
+  margin:0;
+  font-size:1.1rem;
+  color:var(--accent);
+  font-weight:500;
+  text-shadow:0 0 8px rgba(57,255,20,0.08);
+}
+
 /* styles d'accessibilité pour le focus */
 button:focus, a:focus, input:focus{outline:2px solid rgba(57,255,20,0.12);outline-offset:2px}
 
 /* small utilities */
 .hidden{display:none}
+

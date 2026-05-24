@@ -2,6 +2,8 @@
 
 // Variables globales
 let recipes = [];
+let displayedRecipesCount = 15;
+const RECIPES_PER_PAGE = 15;
 const GLOBAL_RECIPE_IMAGE = 'images/photoavenir.png';
 
 const CATEGORY_LABELS = {
@@ -165,7 +167,7 @@ function renderRecipes(){
   if(!grid) return;
   grid.innerHTML = '';
   
-  recipes.forEach((recipe, index) => {
+  recipes.slice(0, displayedRecipesCount).forEach((recipe, index) => {
     const article = document.createElement('article');
     article.className = 'card';
     article.dataset.category = recipe.category;
@@ -188,11 +190,51 @@ function renderRecipes(){
     
     grid.appendChild(article);
   });
+
+  // Ajouter le bouton "Voir plus" si nécessaire
+  updateLoadMoreButton();
 }
 
 // helper: obtenir la liste actuelle de cartes dans la grille
 function getAllCards(){
   return Array.from(grid.querySelectorAll('.card'));
+}
+
+// Gérer le bouton "Voir plus"
+function updateLoadMoreButton(){
+  let loadMoreBtn = document.getElementById('loadMoreBtn');
+  let endMessage = document.getElementById('endMessage');
+  
+  if(displayedRecipesCount < recipes.length){
+    if(!loadMoreBtn){
+      loadMoreBtn = document.createElement('button');
+      loadMoreBtn.id = 'loadMoreBtn';
+      loadMoreBtn.className = 'load-more-btn';
+      loadMoreBtn.textContent = 'Voir plus';
+      loadMoreBtn.addEventListener('click', () => {
+        displayedRecipesCount += RECIPES_PER_PAGE;
+        renderRecipes();
+        initializeFilters();
+        applyFilters();
+      });
+      grid.parentNode.appendChild(loadMoreBtn);
+    }
+    if(endMessage){
+      endMessage.remove();
+    }
+  } else {
+    if(loadMoreBtn){
+      loadMoreBtn.remove();
+    }
+    // Ajouter le message de fin
+    if(!endMessage){
+      endMessage = document.createElement('div');
+      endMessage.id = 'endMessage';
+      endMessage.className = 'end-message';
+      endMessage.innerHTML = '<p>On est au bout ! Reviens plus tard pour d\'autres recettes.</p>';
+      grid.parentNode.appendChild(endMessage);
+    }
+  }
 }
 
 // État du tri courant
