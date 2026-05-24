@@ -120,7 +120,7 @@ async function discoverRecipeFiles(){
   }
 
   const candidates = [];
-  for(let index = 1; index <= 20; index += 1){
+  for(let index = 1; index <= 50; index += 1){
     candidates.push(`recipe${index}.html`);
   }
 
