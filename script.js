@@ -44,6 +44,7 @@ const resetRangeFiltersBtn = document.getElementById('resetRangeFilters');
 const recipesSearch = document.getElementById('recipesSearch');
 const navSearch = document.getElementById('navSearch');
 const sortSelect = document.getElementById('sortSelect');
+const pageLoader = document.getElementById('pageLoader');
 
 function getNumericInputValue(input){
   if(!input) return null;
@@ -57,6 +58,25 @@ function passesRange(value, min, max){
   if(min !== null && value < min) return false;
   if(max !== null && value > max) return false;
   return true;
+}
+
+function hidePageLoader(){
+  if(!pageLoader) return;
+  pageLoader.classList.add('is-hidden');
+}
+
+function waitForImages(container){
+  if(!container) return Promise.resolve();
+  const images = Array.from(container.querySelectorAll('img'));
+  if(images.length === 0) return Promise.resolve();
+
+  return Promise.all(images.map(image => {
+    if(image.complete) return Promise.resolve();
+    return new Promise(resolve => {
+      image.addEventListener('load', resolve, { once: true });
+      image.addEventListener('error', resolve, { once: true });
+    });
+  }));
 }
 
 // Extraire les métadonnées depuis une page de recette
@@ -157,8 +177,11 @@ async function loadRecipes(){
     recipes = loadedRecipes;
     renderRecipes();
     initializeFilters();
+    await waitForImages(grid);
+    hidePageLoader();
   } catch(err) {
     console.error('Erreur lors du chargement des recettes:', err);
+    hidePageLoader();
   }
 }
 
@@ -389,6 +412,10 @@ function initializeFilters(){
 if(grid){
   loadRecipes();
 }
+
+window.addEventListener('load', () => {
+  if(!grid) hidePageLoader();
+});
 
 // Bouton scroll to top
 const scrollToTopBtn = document.getElementById('scrollToTop');
