@@ -10,7 +10,7 @@ const CATEGORY_LABELS = {
   dejeuner: 'Déjeuner',
   midi: 'Midi',
   soir: 'Soir',
-  smoothie: 'Smoothie',
+  smoothie: 'Shakers',
   encas: 'En-cas',
   preentrainement: 'Pré-entraînement'
 };
