@@ -15,6 +15,11 @@ const CATEGORY_LABELS = {
   preentrainement: 'Pré-entraînement'
 };
 
+const MODE_LABELS = {
+  seche: 'Sèche',
+  bulk: 'Bulk'
+};
+
 const CATEGORY_ALIASES = {
   'petit-dejeuner': 'dejeuner',
   petitdejeuner: 'dejeuner',
@@ -31,10 +36,22 @@ function formatCategoryLabel(value = ''){
   return CATEGORY_LABELS[normalized] || normalized;
 }
 
+function normalizeMode(value = ''){
+  const cleaned = String(value).trim().toLowerCase();
+  if(cleaned === 'sèche') return 'seche';
+  return cleaned;
+}
+
+function formatModeLabel(value = ''){
+  const normalized = normalizeMode(value);
+  return MODE_LABELS[normalized] || normalized;
+}
+
 // Éléments DOM
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
-const filters = Array.from(document.querySelectorAll('.filter'));
+const primaryFilters = Array.from(document.querySelectorAll('.filter[data-filter-type="primary"]'));
+const modeFilters = Array.from(document.querySelectorAll('.filter[data-filter-type="mode"]'));
 const grid = document.getElementById('grid');
 const caloriesMinInput = document.getElementById('caloriesMin');
 const caloriesMaxInput = document.getElementById('caloriesMax');
@@ -58,6 +75,21 @@ function passesRange(value, min, max){
   if(min !== null && value < min) return false;
   if(max !== null && value > max) return false;
   return true;
+}
+
+function hasActiveRecipeFilters(){
+  const query = (recipesSearch && recipesSearch.value || '').trim();
+  const caloriesMin = getNumericInputValue(caloriesMinInput);
+  const caloriesMax = getNumericInputValue(caloriesMaxInput);
+  const proteinMin = getNumericInputValue(proteinMinInput);
+  const proteinMax = getNumericInputValue(proteinMaxInput);
+
+  const primaryActive = activeFilter !== 'tous' && activeFilter !== 'all';
+  const modeActive = activeModeFilter !== 'all';
+  const queryActive = query !== '';
+  const rangeActive = [caloriesMin, caloriesMax, proteinMin, proteinMax].some(v => v !== null);
+
+  return primaryActive || modeActive || queryActive || rangeActive;
 }
 
 function hidePageLoader(){
@@ -102,6 +134,7 @@ async function fetchRecipeMetadata(filePath){
     const imageSrc = doc.querySelector('article.recipe figure img')?.getAttribute('src') || '';
     const image = imageSrc.replace(/^\.\.\//, '');
     const category = normalizeCategory(data.category);
+    const mode = normalizeMode(data.mode || 'seche');
     
     return {
       id: data.id,
@@ -111,6 +144,7 @@ async function fetchRecipeMetadata(filePath){
       calories: data.calories,
       protein: data.protein,
       category: category,
+      mode: mode,
       image: image || GLOBAL_RECIPE_IMAGE,
       desc: `${title} — riche en protéines et facile à préparer.`,
       meta: meta,
@@ -189,11 +223,16 @@ async function loadRecipes(){
 function renderRecipes(){
   if(!grid) return;
   grid.innerHTML = '';
+
+  const renderedRecipes = hasActiveRecipeFilters()
+    ? recipes
+    : recipes.slice(0, displayedRecipesCount);
   
-  recipes.slice(0, displayedRecipesCount).forEach((recipe, index) => {
+  renderedRecipes.forEach((recipe, index) => {
     const article = document.createElement('article');
     article.className = 'card';
     article.dataset.category = recipe.category;
+    article.dataset.mode = recipe.mode || 'seche';
     article.dataset.title = recipe.shortTitle;
     article.dataset.calories = recipe.calories;
     article.dataset.protein = recipe.protein;
@@ -206,7 +245,7 @@ function renderRecipes(){
           <h3 class="card-title">${recipe.title}</h3>
           <p class="meta">${recipe.calories} kcal • <span class="protein">${recipe.protein}g</span> protéines</p>
           <p class="desc">${recipe.desc}</p>
-          <div class="tags"><span>${formatCategoryLabel(recipe.category)}</span></div>
+          <div class="tags"><span>${formatCategoryLabel(recipe.category)}</span><span>${formatModeLabel(recipe.mode)}</span></div>
         </div>
       </a>
     `;
@@ -227,6 +266,12 @@ function getAllCards(){
 function updateLoadMoreButton(){
   let loadMoreBtn = document.getElementById('loadMoreBtn');
   let endMessage = document.getElementById('endMessage');
+
+  if(hasActiveRecipeFilters()){
+    if(loadMoreBtn) loadMoreBtn.remove();
+    if(endMessage) endMessage.remove();
+    return;
+  }
   
   if(displayedRecipesCount < recipes.length){
     if(!loadMoreBtn){
@@ -265,6 +310,7 @@ let currentSort = { type: 'none', dir: 'desc' };
 
 // État du filtre
 let activeFilter = 'tous';
+let activeModeFilter = 'all';
 
 // Bascule du menu mobile
 if(hamburger && navLinks){
@@ -286,6 +332,14 @@ if(navLinks){
 
 // Appliquer les filtres et la recherche
 function applyFilters(){
+  const expectedCardCount = hasActiveRecipeFilters()
+    ? recipes.length
+    : Math.min(displayedRecipesCount, recipes.length);
+
+  if(getAllCards().length !== expectedCardCount){
+    renderRecipes();
+  }
+
   const query = (recipesSearch && recipesSearch.value || '').trim().toLowerCase();
   const caloriesMin = getNumericInputValue(caloriesMinInput);
   const caloriesMax = getNumericInputValue(caloriesMaxInput);
@@ -296,11 +350,16 @@ function applyFilters(){
     const title = (card.dataset.title || '').toLowerCase();
     const category = normalizeCategory(card.dataset.category || '');
     const activeCategory = normalizeCategory(activeFilter);
+    const mode = normalizeMode(card.dataset.mode || 'seche');
+    const activeMode = normalizeMode(activeModeFilter);
     const calories = Number(card.dataset.calories || 0);
     const protein = Number(card.dataset.protein || 0);
 
     // Category filter
     const catMatch = (activeFilter === 'tous' || activeFilter === 'all') || (category === activeCategory) || card.querySelector('.tags').innerText.toLowerCase().includes(activeCategory);
+
+    // Secondary category filter
+    const modeMatch = activeModeFilter === 'all' || mode === activeMode;
 
     // Search filter
     const textMatch = !query || title.includes(query);
@@ -309,7 +368,7 @@ function applyFilters(){
     const caloriesMatch = passesRange(calories, caloriesMin, caloriesMax);
     const proteinMatch = passesRange(protein, proteinMin, proteinMax);
 
-    if(catMatch && textMatch && caloriesMatch && proteinMatch){
+    if(catMatch && modeMatch && textMatch && caloriesMatch && proteinMatch){
       card.style.display = '';
     } else {
       card.style.display = 'none';
@@ -347,12 +406,22 @@ function applySort(){
 
 // Initialisation des event listeners et interaction après chargement des cartes
 function initializeFilters(){
-  // Clics sur les boutons de filtre
-  filters.forEach(btn => {
+  // Clics sur les boutons de filtre principaux
+  primaryFilters.forEach(btn => {
     btn.addEventListener('click', () => {
-      filters.forEach(b => b.classList.remove('active'));
+      primaryFilters.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeFilter = btn.dataset.filter;
+      applyFilters();
+    })
+  });
+
+  // Clics sur les boutons de filtre secondaires
+  modeFilters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modeFilters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeModeFilter = btn.dataset.filter;
       applyFilters();
     })
   });
@@ -408,10 +477,41 @@ function initializeFilters(){
   applyFilters();
 }
 
+function injectRecipeMode(){
+  const recipeDataTag = document.querySelector('meta[name="recipe-data"]');
+  const article = document.querySelector('article.recipe');
+  if(!recipeDataTag || !article) return;
+
+  try {
+    const rawContent = recipeDataTag.getAttribute('content') || '{}';
+    const data = JSON.parse(rawContent.replace(/\\'/g, "'"));
+    const mode = normalizeMode(data.mode || 'seche');
+    const modeLabel = formatModeLabel(mode);
+
+    if(!modeLabel) return;
+
+    const header = article.querySelector('header');
+    if(!header) return;
+
+    let modeBadge = article.querySelector('.recipe-mode');
+    if(!modeBadge){
+      modeBadge = document.createElement('p');
+      modeBadge.className = 'recipe-mode';
+      header.appendChild(modeBadge);
+    }
+
+    modeBadge.textContent = `Catégorie secondaire : ${modeLabel}`;
+  } catch(err) {
+    console.warn('Impossible d’ajouter la catégorie secondaire sur la page recette.', err);
+  }
+}
+
 // Charger les recettes au démarrage
 if(grid){
   loadRecipes();
 }
+
+injectRecipeMode();
 
 window.addEventListener('load', () => {
   if(!grid) hidePageLoader();

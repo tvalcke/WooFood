@@ -107,14 +107,26 @@
       <div class="recipes-header">
         <h2>Recettes</h2>
         <div class="recipes-controls">
-          <div class="filters" role="tablist" aria-label="Catégories de recettes">
-            <button class="filter active" data-filter="tous">Tous</button>
-            <button class="filter" data-filter="dejeuner">Déjeuner</button>
-            <button class="filter" data-filter="midi">Midi</button>
-            <button class="filter" data-filter="soir">Soir</button>
-            <button class="filter" data-filter="smoothie">Shakers</button>
-            <button class="filter" data-filter="encas">En-cas</button>
-            <button class="filter" data-filter="preentrainement">Pré-entraînement</button>
+          <div class="filters-group">
+            <p class="filters-group-title">Catégories principales</p>
+            <div class="filters" role="tablist" aria-label="Catégories principales de recettes">
+              <button class="filter active" data-filter-type="primary" data-filter="tous">Tous</button>
+              <button class="filter" data-filter-type="primary" data-filter="dejeuner">Déjeuner</button>
+              <button class="filter" data-filter-type="primary" data-filter="midi">Midi</button>
+              <button class="filter" data-filter-type="primary" data-filter="soir">Soir</button>
+              <button class="filter" data-filter-type="primary" data-filter="smoothie">Shakers</button>
+              <button class="filter" data-filter-type="primary" data-filter="encas">En-cas</button>
+              <button class="filter" data-filter-type="primary" data-filter="preentrainement">Pré-entraînement</button>
+            </div>
+          </div>
+
+          <div class="filters-group filters-group-secondary">
+            <p class="filters-group-title">Catégories secondaires</p>
+            <div class="filters" role="tablist" aria-label="Catégories secondaires de recettes">
+              <button class="filter active" data-filter-type="mode" data-filter="all">Toutes</button>
+              <button class="filter" data-filter-type="mode" data-filter="seche">Sèche</button>
+              <button class="filter" data-filter-type="mode" data-filter="bulk">Bulk</button>
+            </div>
           </div>
 
           <div class="range-filters" aria-label="Filtrer par calories et protéines">
